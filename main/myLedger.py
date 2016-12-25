@@ -15,7 +15,7 @@ class myLedger:
 		Name CHAR(50),
 		Exc REAL,
 		Date CHAR(50))''')
-
+#Id, Name, Money, Date, Category, Descrip, Reconcile,
 	def insert_db(self, cur, csv):
 		cur.execute("INSERT INTO ledger VALUES (?,?,?,?)", csv)
 
