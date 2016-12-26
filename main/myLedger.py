@@ -10,19 +10,27 @@ class myLedger:
 	
 
 	def init_db(self, cur):
+		#Cols: Id, Name, Money, Date, Category, Descrip, Reconcile,
 		cur.execute('''CREATE TABLE ledger (
 		Id INT PRIMARY KEY	NOT NULL,
 		Name CHAR(50),
 		Exc REAL,
 		Date CHAR(50))''')
-#Id, Name, Money, Date, Category, Descrip, Reconcile,
+
 	def insert_db(self, cur, csv):
 		cur.execute("INSERT INTO ledger VALUES (?,?,?,?)", csv)
 
 	def delete_db(self, cur, _id):
+		cur.execute("DELETE from ledger where Id=?;", (_id,))
 		return
 		
-	def update_db(self, cur, _id):
+	def update_db(self, cur, csv):
+		cur.execute ('''
+			UPDATE ledger 
+			SET Name = ?,
+			Exc = ?,
+			Date = ?
+			WHERE Id=?''', csv)
 		return
 
 	def select_db(self, cur):
@@ -57,12 +65,16 @@ class myLedger:
 
 			if uinput is "d":
 				_id = int(input("Enter the id you wish to delete"))
-				delete_db(cur, _id)
+				self.delete_db(cur, _id)
 				db.commit()
 
 			if uinput is "u":
 				_id = int(input("Enter the id you wish to update"))
-				update_db(cur, _id)
+				name = input("Enter the name:")
+				exc = input("Enter Exchange amt:")
+				date = input("enter the date:")
+				csv = (name,exc,date, _id)
+				self.update_db(cur, csv)
 				db.commit()
 
 			if uinput is "q":
