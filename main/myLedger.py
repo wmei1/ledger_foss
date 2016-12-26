@@ -4,15 +4,16 @@
 import csv
 import sqlite3
 import sys
+import os
+import fileinput
 
 id_num = 0
 class myLedger:
 	
-
 	def init_db(self, cur):
 		#Cols: Id, Name, Money, Date, Category, Descrip, Reconcile,
 		cur.execute('''CREATE TABLE ledger (
-		Id INT PRIMARY KEY	NOT NULL,
+		Id INT PRIMARY KEY NOT NULL,
 		Name CHAR(50),
 		Exc REAL,
 		Date CHAR(50))''')
@@ -22,7 +23,6 @@ class myLedger:
 
 	def delete_db(self, cur, _id):
 		cur.execute("DELETE from ledger where Id=?;", (_id,))
-		return
 		
 	def update_db(self, cur, csv):
 		cur.execute ('''
@@ -31,7 +31,6 @@ class myLedger:
 			Exc = ?,
 			Date = ?
 			WHERE Id=?''', csv)
-		return
 
 	def select_db(self, cur):
 		cursor = cur.execute("SELECT * FROM ledger")
@@ -41,7 +40,7 @@ class myLedger:
 			print("Money = ", row[2])
 			print("Date = ", row[3], "\n")
 		#print(cur.fetchall())
-		
+
 	def program(self, db, cur):
 		global id_num
 		while True:
@@ -82,13 +81,29 @@ class myLedger:
 
 
 if __name__ == "__main__":
-	db = sqlite3.connect(':memory:')
-	temp = 1
+
+	idCountFile = None
+	if (os.path.isfile('./id_count.txt')):
+		with open('id_count.txt', 'r+') as idCountFile:
+			idCount = idCountFile.readline()
+			#print(idCount)	used for debeugging
+			id_num = int(idCount)
+
+	dbFlag = False
+	dbFile = None
+	if (not os.path.isfile('./ledger.db')):
+		dbFile = open('ledger.db', 'w+')
+		dbFlag = True
+
+	db = sqlite3.connect('ledger.db')
 	cur = db.cursor()
 	led = myLedger()
-	led.init_db(cur)
+
+	if(dbFlag is True):
+		led.init_db(cur)
+
 	db.commit()
 	led.program(db, cur)
 
-
-
+	with open('id_count.txt', 'w') as idCountFile:
+		idCountFile.write(str(id_num))
