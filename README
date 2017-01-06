@@ -1,18 +1,15 @@
 This is a ledger program to keep track of expenditures or budgeting, similar to ynab but foss(Free and Open-source)
 
 What works now:
-1. Can create database table
-2. Can insert row to table
-3. Can print out table
-
+1. Basic database operations
+2. Saves user profile
 To do list:
 	Soon:
-		1. save and exports to csv
-		2. data validation
-		3. Finish database queries.
-		4. discrete categories.
-		5. Multiple Banking Accounts.
-		6. Banking Balance.
+		1. data validation
+		2. Finish database queries.
+		3. discrete categories.
+		4. Multiple Banking Accounts.
+		5. Banking Balance.
 	Later:
 		1.GUI
 
