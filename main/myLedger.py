@@ -34,11 +34,9 @@ class myLedger:
 
 	def select_db(self, cur):
 		cursor = cur.execute("SELECT * FROM ledger")
+		print("ID|NAME|Money|Date	")
 		for row in cursor:
-			print("ID = ", row[0])
-			print("NAME = ", row[1])
-			print("Money = ", row[2])
-			print("Date = ", row[3], "\n")
+			print(row[0],"|",row[1],"|",row[2],"|",row[3])
 		#print(cur.fetchall())
 
 	def program(self, db, cur):
@@ -47,7 +45,12 @@ class myLedger:
 			uinput = input("Enter an command, Enter h to show a list of commands: ")
 
 			if uinput is "h":
-				print('''h - help text \ns - prints out the ledger \ni - insert a new row \nd - delete a row \nu - update a row \nq - quit program \n''')
+				print(' h - help text\n', 
+				's - prints out the ledger\n', 
+				'i - insert a new row\n', 
+				'd - delete a row\n', 
+				'u - update a row\n', 
+				'q - quit program\n')
 
 			if uinput is "s":
 				self.select_db(cur)
