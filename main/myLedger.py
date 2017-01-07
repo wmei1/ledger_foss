@@ -16,10 +16,12 @@ class myLedger:
 		Id INT PRIMARY KEY NOT NULL,
 		Name CHAR(50),
 		Exc REAL,
-		Date CHAR(50))''')
+		Date CHAR(50),
+		Cat CHAR(50),
+		Desc CHAR(50))''')
 
 	def insert_db(self, cur, csv):
-		cur.execute("INSERT INTO ledger VALUES (?,?,?,?)", csv)
+		cur.execute("INSERT INTO ledger VALUES (?,?,?,?,?,?)", csv)
 
 	def delete_db(self, cur, _id):
 		cur.execute("DELETE from ledger where Id=?;", (_id,))
@@ -29,14 +31,16 @@ class myLedger:
 			UPDATE ledger 
 			SET Name = ?,
 			Exc = ?,
-			Date = ?
+			Date = ?,
+			Cat = ?,
+			Desc = ?,
 			WHERE Id=?''', csv)
 
 	def select_db(self, cur):
 		cursor = cur.execute("SELECT * FROM ledger")
-		print("ID|NAME|Money|Date	")
+		print("ID|NAME|Money|Date|Category|Desc	")
 		for row in cursor:
-			print(row[0],"|",row[1],"|",row[2],"|",row[3])
+			print(row[0],"|",row[1],"|",row[2],"|",row[3],"|",row[4],"|",row[5])
 		#print(cur.fetchall())
 
 	def program(self, db, cur):
@@ -59,7 +63,9 @@ class myLedger:
 				name = input("Enter the name:")
 				exc = input("Enter Exchange amt:")
 				date = input("enter the date:")
-				csv = (id_num,name,exc,date)
+				cat = input("enter a category:")
+				desc = input("enter a desc:")
+				csv = (id_num,name,exc,date,cat,desc)
 				id_num +=1
 				#print(csv)
 				self.insert_db(cur, csv)
@@ -75,7 +81,9 @@ class myLedger:
 				name = input("Enter the name:")
 				exc = input("Enter Exchange amt:")
 				date = input("enter the date:")
-				csv = (name,exc,date, _id)
+				cat = input("enter a category:")
+				desc = input("enter a desc:")
+				csv = (name,exc,date,cat,desc, _id)
 				self.update_db(cur, csv)
 				db.commit()
 
