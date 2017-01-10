@@ -46,6 +46,11 @@ class myLedger:
 			print(row[0],"|",row[1],"|",row[2],"|",row[3],"|",row[4],"|",row[5])
 		#print(cur.fetchall())
 
+	def print_cate(self):
+		global categories
+		for index in range(len(categories)):
+			print(index,'.',categories[index])
+
 	def program(self, db, cur):
 		global id_num, categories,CATE
 		while True:
@@ -68,8 +73,7 @@ class myLedger:
 				exc = input("Enter Exchange amt:")
 				date = input("enter the date:")
 				#prints out categories to choose from
-				for index in range(len(categories)):
-					print(index,'.',categories[index])
+				self.print_cate()
 				#checks if input is integer.
 				cat = None
 				while cat is None:
@@ -118,19 +122,16 @@ class myLedger:
 					categories = CATE
 					print("categories are restored to default")
 				if uinput is "m":
-					for index in range(len(categories)):
-						print(index,'.',categories[index])
+					self.print_cate()
 					mod = input("Enter the category ID")
 					temp_category = input("Enter the new name of the category")
 					categories[mod] = temp_category
 				if uinput is "d":
-					for index in range(len(categories)):
-						print(index,'.',categories[index])
+					self.print_cate()
 					mod = input("Enter the ID you want to delete")
 					del categories[mod]	
 				if uinput is "p":
-					for index in range(len(categories)):
-						print(index,'.',categories[index])
+					self.print_cate()
 
 			if uinput is "q":
 				return False
