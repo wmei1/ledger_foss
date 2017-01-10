@@ -123,12 +123,12 @@ class myLedger:
 					print("categories are restored to default")
 				if uinput is "m":
 					self.print_cate()
-					mod = input("Enter the category ID")
+					mod = int(input("Enter the category ID"))
 					temp_category = input("Enter the new name of the category")
 					categories[mod] = temp_category
 				if uinput is "d":
 					self.print_cate()
-					mod = input("Enter the ID you want to delete")
+					mod = int(input("Enter the ID you want to delete"))
 					del categories[mod]	
 				if uinput is "p":
 					self.print_cate()
