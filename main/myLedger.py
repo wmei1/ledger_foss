@@ -56,7 +56,8 @@ class myLedger:
 				's - prints out the ledger\n', 
 				'i - insert a new row\n', 
 				'd - delete a row\n', 
-				'u - update a row\n', 
+				'u - update a row\n',
+				'c - category options' 
 				'q - quit program\n')
 
 			if uinput is "s":
