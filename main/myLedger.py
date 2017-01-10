@@ -6,8 +6,11 @@ import sqlite3
 import sys
 import os
 import fileinput
+import pickle
 
 id_num = 0
+CATE = ['Bank', 'Entertainment', 'Food', 'Other'] 
+categories = ['Bank', 'Entertainment', 'Food','Other'] 
 class myLedger:
 	
 	def init_db(self, cur):
@@ -44,7 +47,7 @@ class myLedger:
 		#print(cur.fetchall())
 
 	def program(self, db, cur):
-		global id_num
+		global id_num, categories,CATE
 		while True:
 			uinput = input("Enter an command, Enter h to show a list of commands: ")
 
@@ -63,7 +66,24 @@ class myLedger:
 				name = input("Enter the name:")
 				exc = input("Enter Exchange amt:")
 				date = input("enter the date:")
-				cat = input("enter a category:")
+				#prints out categories to choose from
+				for index in range(len(categories)):
+					print(index,'.',categories[index])
+				#checks if input is integer.
+				cat = None
+				while cat is None:
+					cate_in = input("Choose a category from the list or enter your own:")
+					try:
+						val = int(cate_in)
+						if val < len(categories):
+							cat = categories[val]
+						else:
+							print("# entered is out of range")
+					except ValueError:
+						cat = cate_in
+						categories.append(cat)
+						
+				
 				desc = input("enter a desc:")
 				csv = (id_num,name,exc,date,cat,desc)
 				id_num +=1
@@ -87,6 +107,30 @@ class myLedger:
 				self.update_db(cur, csv)
 				db.commit()
 
+			if uinput is "c":
+				print(' r - restore to default\n',
+				'd - delete a category\n',
+				'm - modify a category\n',
+				'p - print out the category')
+				uinput = input("")
+				if uinput is "r":
+					categories = CATE
+					print("categories are restored to default")
+				if uinput is "m":
+					for index in range(len(categories)):
+						print(index,'.',categories[index])
+					mod = input("Enter the category ID")
+					temp_category = input("Enter the new name of the category")
+					categories[mod] = temp_category
+				if uinput is "d":
+					for index in range(len(categories)):
+						print(index,'.',categories[index])
+					mod = input("Enter the ID you want to delete")
+					del categories[mod]	
+				if uinput is "p":
+					for index in range(len(categories)):
+						print(index,'.',categories[index])
+
 			if uinput is "q":
 				return False
 
@@ -97,8 +141,11 @@ if __name__ == "__main__":
 	if (os.path.isfile('./id_count.txt')):
 		with open('id_count.txt', 'r+') as idCountFile:
 			idCount = idCountFile.readline()
-			#print(idCount)	used for debeugging
+			print(idCount)	#used for debeugging
 			id_num = int(idCount)
+	if (os.path.isfile('./cate.p')):
+		categories = pickle.load( open("cate.p", "rb"))
+		
 
 	dbFlag = False
 	dbFile = None
@@ -118,3 +165,4 @@ if __name__ == "__main__":
 
 	with open('id_count.txt', 'w') as idCountFile:
 		idCountFile.write(str(id_num))
+	pickle.dump(categories,open('cate.p',"wb"))
