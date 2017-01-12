@@ -8,6 +8,8 @@ import os
 import fileinput
 import pickle
 from category import *
+import signal
+
 
 id_num = 0
 CATE = ['Bank', 'Entertainment', 'Food', 'Other'] 
@@ -47,52 +49,40 @@ class myLedger:
 			print(row[0],"|",row[1],"|",row[2],"|",row[3],"|",row[4],"|",row[5])
 		#print(cur.fetchall())
 
-	'''def print_cate(self):
-		#global categories
-		for index in range(len(categories)):
-			print(index,'.',categories[index])'''
-
+	def handler(self,signum, frame):
+		global id_num
+		with open('id_count.txt', 'w') as idCountFile:
+			idCountFile.write(str(id_num))
+		pickle.dump(category.categories,open('cate.p',"wb"))
+		print("\nexiting")
+		exit()
+				
 	def program(self, db, cur):
 		global id_num
 		#global categories,CATE
+		signal.signal(signal.SIGTSTP, self.handler)
 		while True:
-			uinput = input("Enter an command, Enter h to show a list of commands: ")
+			uinput = input("Main Menu, Enter h to show a list of commands: ")
 
 			if uinput is "h":
 				print(' h - help text\n', 
-				's - prints out the ledger\n', 
-				'i - insert a new row\n', 
-				'd - delete a row\n', 
-				'u - update a row\n',
-				'c - category options' 
+				'p - prints out all entries in ledger\n', 
+				'a - add a new entry\n', 
+				'd - delete an entry\n', 
+				'u - update an entry\n',
+				'c - category options\n' 
 				'q - quit program\n')
 
-			if uinput is "s":
+			if uinput is "p":
 				self.select_db(cur)
 					
-			if uinput is "i":
+			if uinput is "a":
 				name = input("Enter the name:")
 				exc = input("Enter Exchange amt:")
 				date = input("enter the date:")
 				#prints out categories to choose from
 				category.print_categories()
 				cat = category.add_category()
-				#checks if input is integer.
-				'''
-				cat = None
-				while cat is None:
-					cate_in = input("Choose a category from the list or enter your own:")
-					try:
-						val = int(cate_in)
-						if val < len(categories):
-							cat = categories[val]
-						else:
-							print("# entered is out of range")
-					except ValueError:
-						cat = cate_in
-						categories.append(cat)
-				'''		
-				
 				desc = input("enter a desc:")
 				csv = (id_num,name,exc,date,cat,desc)
 				id_num +=1
@@ -118,32 +108,13 @@ class myLedger:
 				db.commit()
 
 			if uinput is "c":
-				category.main_category(category)
+				category.main_category()
 
 			if uinput is "q":
 				return False
-
-'''				print(' r - restore to default\n',
-				'd - delete a category\n',
-				'm - modify a category\n',
-				'p - print out the category')
-				uinput = input("")
-				if uinput is "r":
-					categories = CATE
-					print("categories are restored to default")
-				if uinput is "m":
-					self.print_cate()
-					mod = int(input("Enter the category ID"))
-					temp_category = input("Enter the new name of the category")
-					categories[mod] = temp_category
-				if uinput is "d":
-					self.print_cate()
-					mod = int(input("Enter the ID you want to delete"))
-					del categories[mod]	
-				if uinput is "p":
-					self.print_cate()
-'''
 			
+
+
 
 if __name__ == "__main__":
 

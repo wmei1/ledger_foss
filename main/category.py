@@ -1,35 +1,43 @@
 	
 #Helper Class for all categories related functions
 class category:
+	
 	CATE = ['Bank', 'Entertainment', 'Food', 'Other'] 
 	categories = ['Bank', 'Entertainment', 'Food','Other'] 
+
 	def print_categories():
 		cate = category.categories
 		for index in range(len(cate)):
-			print(index, '.', cate[index])
+			print(index,'. ', cate[index],sep='')
 	
-	def main_category(self):
-		#global categories
-		cate = category.categories
+	def help_message():
 		print(' r - restore to default\n',
 				'd - delete a category\n',
 				'm - modify a category\n',
-				'p - print out the category')
-		uinput = input("")
-		if uinput is "r":
-			category.categories =['Bank', 'Entertainment', 'Food', 'Other'] 
-			print("categories are restored to default")
-		if uinput is "m":
-			self.print_categories()
-			mod = int(input("Enter the category ID"))
-			temp_category = input("Enter the new name of the category")
-			category.categories[mod] = temp_category
-		if uinput is "d":
-			self.print_categories()
-			mod = int(input("Enter the ID you want to delete"))
-			del category.categories[mod]	
-		if uinput is "p":
-			self.print_categories()
+				'p - print out the category\n',
+				'b - back to main menu\n')
+
+	def main_category():
+		while True:
+			uinput = input("Category Menu, enter h for a list of commands: ")
+			if uinput is "h":
+				category.help_message()
+			if uinput is "r":
+				category.categories =['Bank', 'Entertainment', 'Food', 'Other'] 
+				print("categories are restored to default")
+			if uinput is "m":
+				category.print_categories()
+				mod = int(input("Enter the category ID"))
+				temp_category = input("Enter the new name of the category")
+				category.categories[mod] = temp_category
+			if uinput is "d":
+				category.print_categories()
+				mod = int(input("Enter the ID you want to delete"))
+				del category.categories[mod]	
+			if uinput is "p":
+				category.print_categories()
+			if uinput is "b":
+				return False
 
 	def add_category():
 		cate = category.categories
