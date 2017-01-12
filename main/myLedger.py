@@ -7,6 +7,7 @@ import sys
 import os
 import fileinput
 import pickle
+from category import *
 
 id_num = 0
 CATE = ['Bank', 'Entertainment', 'Food', 'Other'] 
@@ -46,13 +47,14 @@ class myLedger:
 			print(row[0],"|",row[1],"|",row[2],"|",row[3],"|",row[4],"|",row[5])
 		#print(cur.fetchall())
 
-	def print_cate(self):
-		global categories
+	'''def print_cate(self):
+		#global categories
 		for index in range(len(categories)):
-			print(index,'.',categories[index])
+			print(index,'.',categories[index])'''
 
 	def program(self, db, cur):
-		global id_num, categories,CATE
+		global id_num
+		#global categories,CATE
 		while True:
 			uinput = input("Enter an command, Enter h to show a list of commands: ")
 
@@ -73,8 +75,10 @@ class myLedger:
 				exc = input("Enter Exchange amt:")
 				date = input("enter the date:")
 				#prints out categories to choose from
-				self.print_cate()
+				category.print_categories()
+				cat = category.add_category()
 				#checks if input is integer.
+				'''
 				cat = None
 				while cat is None:
 					cate_in = input("Choose a category from the list or enter your own:")
@@ -87,7 +91,7 @@ class myLedger:
 					except ValueError:
 						cat = cate_in
 						categories.append(cat)
-						
+				'''		
 				
 				desc = input("enter a desc:")
 				csv = (id_num,name,exc,date,cat,desc)
@@ -97,6 +101,7 @@ class myLedger:
 				db.commit()
 
 			if uinput is "d":
+				self.select_db(cur)
 				_id = int(input("Enter the id you wish to delete"))
 				self.delete_db(cur, _id)
 				db.commit()
@@ -113,7 +118,12 @@ class myLedger:
 				db.commit()
 
 			if uinput is "c":
-				print(' r - restore to default\n',
+				category.main_category(category)
+
+			if uinput is "q":
+				return False
+
+'''				print(' r - restore to default\n',
 				'd - delete a category\n',
 				'm - modify a category\n',
 				'p - print out the category')
@@ -132,10 +142,8 @@ class myLedger:
 					del categories[mod]	
 				if uinput is "p":
 					self.print_cate()
-
-			if uinput is "q":
-				return False
-
+'''
+			
 
 if __name__ == "__main__":
 
@@ -146,7 +154,7 @@ if __name__ == "__main__":
 			print(idCount)	#used for debeugging
 			id_num = int(idCount)
 	if (os.path.isfile('./cate.p')):
-		categories = pickle.load( open("cate.p", "rb"))
+		category.categories = pickle.load( open("cate.p", "rb"))
 		
 
 	dbFlag = False
@@ -167,4 +175,4 @@ if __name__ == "__main__":
 
 	with open('id_count.txt', 'w') as idCountFile:
 		idCountFile.write(str(id_num))
-	pickle.dump(categories,open('cate.p',"wb"))
+	pickle.dump(category.categories,open('cate.p',"wb"))
