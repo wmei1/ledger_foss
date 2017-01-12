@@ -5,16 +5,16 @@ written in python3
 What works now:
 1. Basic database operations
 2. Saves user profile
+3. categories
+
 To do list:
 	Soon:
 		- data validation (unique db rows)
 		- Finish database queries.
-		- predefined categories.
-		- allow user to create new categories.
 		- Multiple Banking Accounts.
 		- Banking Balance.
 	Later:
 		1.GUI(qt or gtk)
 
 
-last updated: 1/7/2017
+last updated: 1/12/2017
