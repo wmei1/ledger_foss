@@ -11,10 +11,11 @@ class category:
 			print(index,'. ', cate[index],sep='')
 	
 	def help_message():
-		print(' r - restore to default\n',
-				'd - delete a category\n',
-				'm - modify a category\n',
-				'p - print out the category\n',
+		print('r - restore to default\n'
+				'a - add a category\n'
+				'd - delete a category\n'
+				'm - modify a category\n'
+				'p - print out the category\n'
 				'b - back to main menu\n')
 
 	def main_category():
@@ -32,14 +33,16 @@ class category:
 				category.categories[mod] = temp_category
 			if uinput is "d":
 				category.print_categories()
-				mod = int(input("Enter the ID you want to delete"))
+				mod = int(input("Enter the ID you want to delete: "))
 				del category.categories[mod]	
 			if uinput is "p":
 				category.print_categories()
+			if uinput is "a":
+				category.addCategories()
 			if uinput is "b":
 				return False
 
-	def add_category():
+	def checkCategory():
 		cate = category.categories
 		cat = None
 		while cat is None:
@@ -61,3 +64,8 @@ class category:
 	def getCategories():
 		return categories
 
+	def addCategories():
+		str = input("Enter the category you want to add.")
+		category.categories.append(str)
+		print("Category",str,"added")
+		

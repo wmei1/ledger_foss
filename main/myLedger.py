@@ -12,6 +12,7 @@ import signal
 
 
 id_num = 0
+balance =None
 CATE = ['Bank', 'Entertainment', 'Food', 'Other'] 
 categories = ['Bank', 'Entertainment', 'Food','Other'] 
 class myLedger:
@@ -22,7 +23,7 @@ class myLedger:
 		Id INT PRIMARY KEY NOT NULL,
 		Name CHAR(50),
 		Exc REAL,
-		Date CHAR(50),
+		Date DATE,
 		Cat CHAR(50),
 		Desc CHAR(50))''')
 
@@ -56,43 +57,62 @@ class myLedger:
 		pickle.dump(category.categories,open('cate.p',"wb"))
 		print("\nexiting")
 		exit()
-				
+
+	def saveFiles(self):
+		with open('save.txt', 'w') as saveFile:
+			saveFile.write(str(id_num)+","+str(balance))
+
+		pickle.dump(category.categories,open('cate.p',"wb"))
+
 	def program(self, db, cur):
-		global id_num
+		global id_num, balance
 		#global categories,CATE
+		if balance == None:
+			balance = float(input("Enter a starting balance."))
 		signal.signal(signal.SIGTSTP, self.handler)
 		while True:
 			uinput = input("Main Menu, Enter h to show a list of commands: ")
 
 			if uinput is "h":
-				print(' h - help text\n', 
-				'p - prints out all entries in ledger\n', 
-				'a - add a new entry\n', 
-				'd - delete an entry\n', 
-				'u - update an entry\n',
+				print('h - help text\n' 
+				'p - prints out all entries in ledger\n'
+				'b - modify the balance amount\n'
+				'a - add a new entry\n' 
+				'd - delete an entry\n' 
+				'u - update an entry\n'
 				'c - category options\n' 
 				'q - quit program\n')
 
 			if uinput is "p":
+				print("Current Balance:"+str(balance))
 				self.select_db(cur)
-					
+
+			if uinput is "b":
+				try:
+					balance = float(input("Enter a new balance: "))
+				except ValueError:
+					print("input was not a valid number");
+					continue
 			if uinput is "a":
 				name = input("Enter the name:")
-				exc = input("Enter Exchange amt:")
+				exc = input("Enter Exchange amt(negatives for purchases, positive for deposits):")
 				date = input("enter the date:")
 				#prints out categories to choose from
 				category.print_categories()
-				cat = category.add_category()
+				cat = category.checkCategory()
 				desc = input("enter a desc:")
 				csv = (id_num,name,exc,date,cat,desc)
 				id_num +=1
 				#print(csv)
 				self.insert_db(cur, csv)
 				db.commit()
+				balance += float(exc)
 
 			if uinput is "d":
 				self.select_db(cur)
 				_id = int(input("Enter the id you wish to delete"))
+				#amt = cur.execute("SELECT Exc from ledger where Id=?;", (_id,))
+				#balance -= float(amt)
 				self.delete_db(cur, _id)
 				db.commit()
 
@@ -113,17 +133,19 @@ class myLedger:
 			if uinput is "q":
 				return False
 			
+			self.saveFiles()
 
-
-
+			
 if __name__ == "__main__":
 
 	idCountFile = None
-	if (os.path.isfile('./id_count.txt')):
-		with open('id_count.txt', 'r+') as idCountFile:
-			idCount = idCountFile.readline()
-			print(idCount)	#used for debeugging
-			id_num = int(idCount)
+	if (os.path.isfile('./save.txt')):
+		with open('save.txt', 'r+') as saveFile:
+			save = saveFile.readline()
+			print(save)	#used for debeugging
+			strSplit =save.split(",")
+			id_num = int(strSplit[0])
+			balance = float(strSplit[1])
 	if (os.path.isfile('./cate.p')):
 		category.categories = pickle.load( open("cate.p", "rb"))
 		
@@ -144,6 +166,7 @@ if __name__ == "__main__":
 	db.commit()
 	led.program(db, cur)
 
-	with open('id_count.txt', 'w') as idCountFile:
-		idCountFile.write(str(id_num))
+	with open('save.txt', 'w') as saveFile:
+		saveFile.write(str(id_num)+","+str(balance))
+
 	pickle.dump(category.categories,open('cate.p',"wb"))
