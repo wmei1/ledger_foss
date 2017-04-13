@@ -154,6 +154,7 @@ if __name__ == "__main__":
 	dbFile = None
 	if (not os.path.isfile('./ledger.db')):
 		dbFile = open('ledger.db', 'w+')
+		dbFile.close()
 		dbFlag = True
 
 	db = sqlite3.connect('ledger.db')
