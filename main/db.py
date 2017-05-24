@@ -7,15 +7,19 @@ import signal
 from category import *
 
 
-class Dao:
+class db:
 
 	dbFile=None
 	dbFlag=False
 	conn = None
 	cur = None
+	dbname = None
+
+	def __init__(self, dbname):
+		self.dbname = dbname
 
 	def create_db(self):
-	cur.execute('''CREATE TABLE LEDGER (
+		cur.execute('CREATE TABLE '+dbname + ''' (
 				ID INT PRIMARY KEY NOT NULL,
 				NAME CHAR(20),
 				EXC REAL,
@@ -24,14 +28,14 @@ class Dao:
 				DESC CHAR(50))''')
 
 	def insert_row(self,csv):
-		cur.execute("INSERT INTO LEDGER VALUES (?,?,?,?,?,?)", csv)
+		cur.execute("INSERT INTO "+dbname+" VALUES (?,?,?,?,?,?)", csv)
 
 	def delete_row(self,_id):
-		cur.execute("DELETE FROM LEDGER WHERE ID=?",(_id,))
+		cur.execute("DELETE FROM "+dbname" WHERE ID=?",(_id,))
 
 	def update_row(self, csv):
-		cur.execute('''
-					UPDATE LEDGER SET NAME =?,
+		cur.execute('UPDATE '+dbname+''' SET 
+					NAME =?,
 					EXC=?,
 					DATE=?,
 					CATE=?,
@@ -39,7 +43,7 @@ class Dao:
 					WHERE ID=?''', csv)
 
 	def print_db(self):
-		cursor = cur.execute("SELECT * FROM LEDGER")
+		cursor = cur.execute("SELECT * FROM "+dbname)
 		print("ID|NAME|MONEY|DATE|CATEGORY|DESC")
 		for row in cursor:
 			print(row[0],"|",row[1],"|",row[2],"|",row[3],"|",row[4],"|",row[5])
@@ -48,8 +52,8 @@ class Dao:
 	def startConnection():
 		dbFlag=False
 		try:
-			if(not os.path.isfile('./ledger.db')):
-				dbFile = open('ledger.db', 'w+')
+			if(not os.path.isfile('./'+dbname+'.db')):
+				dbFile = open(dbname+'.db', 'w+')
 				dbFile.close()
 				dbFlag = True
 			conn = sqlite3.connection()
