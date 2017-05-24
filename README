@@ -2,19 +2,7 @@ This is a ledger program to keep track of expenditures or budgeting, similar to 
 
 written in python3
 
-What works now:
-1. Basic database operations
-2. Saves user profile
-3. categories
-
-To do list:
-	Soon:
-		- data validation (unique db rows)
-		- Finish database queries.
-		- Multiple Banking Accounts.
-		- Banking Balance.
-	Later:
-		1.GUI(qt or gtk)
+Refactoring code for Tkinter and Django versions
 
 
-last updated: 1/12/2017
+last updated: 4/14/2017
