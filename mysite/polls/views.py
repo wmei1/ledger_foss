@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from django.utils import timezone
 
-from .models import Question
+from .models import Choice, Question
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
@@ -37,7 +37,8 @@ def vote(request, question_id):
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
-        return render(request, 'polls/details.html',{
+
+        return render(request, 'polls/detail.html',{
             'question': question,
             'error_message': "You didn't select a choice.",
         })
