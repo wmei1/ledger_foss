@@ -1,0 +1,19 @@
+Functional Requirements:
+-User login
+-User can enter in money spent, to keep track of expenditures
+-User can enters amounts to allocate budget to different categories.
+-User can add or modify categories
+-user can modify and delete existing transactions
+-user can view all past and present transactions.
+-entries should contain, amount, date, category, and description.
+-user can have different bank accounts that money is being put into or used from
+	- i.e pay utility bill from citi bank acc.
+-Can have multiple budgets (Ledgers)
+
+
+Non-Functional Requirements:
+-There should be a difference between inflow and outflow of money
+-Everything should be done on 1 page.
+
+Tkinter version will be a YNAB4 open source alternative
+Django version will be a web app open alternative.

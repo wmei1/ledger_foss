@@ -1,8 +1,13 @@
-This is a ledger program to keep track of expenditures and budgeting, similar to ynab but foss(Free and Open-source)
-
-written in python3
-
-Refactoring code for Tkinter and Django versions
+This is a budget program to keep track of expenditures and budgeting, similar to ynab but foss(Free and Open-source)
 
 
-last updated: 5/23/2017
+Status: Porting over to Javascript.
+
+Road Map:
+1. Python standalone app executable using pyinstaller
+	-wxPython GUI
+2. Javascript client-side web app version
+3. MEAN Stack full server supporting client-side app.
+
+
+last updated: 5/31/2017
